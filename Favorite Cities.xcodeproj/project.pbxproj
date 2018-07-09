@@ -13,6 +13,7 @@
 		14B264A420F3A71C004F7257 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14B264A220F3A71C004F7257 /* Main.storyboard */; };
 		14B264A620F3A71E004F7257 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14B264A520F3A71E004F7257 /* Assets.xcassets */; };
 		14B264A920F3A71E004F7257 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14B264A720F3A71E004F7257 /* LaunchScreen.storyboard */; };
+		14B264B120F3AC88004F7257 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B264B020F3AC88004F7257 /* City.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		14B264A520F3A71E004F7257 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		14B264A820F3A71E004F7257 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		14B264AA20F3A71E004F7257 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		14B264B020F3AC88004F7257 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				14B2649C20F3A71C004F7257 /* AppDelegate.swift */,
 				14B2649E20F3A71C004F7257 /* MasterViewController.swift */,
 				14B264A020F3A71C004F7257 /* DetailViewController.swift */,
+				14B264B020F3AC88004F7257 /* City.swift */,
 				14B264A220F3A71C004F7257 /* Main.storyboard */,
 				14B264A520F3A71E004F7257 /* Assets.xcassets */,
 				14B264A720F3A71E004F7257 /* LaunchScreen.storyboard */,
@@ -140,6 +143,7 @@
 			files = (
 				14B264A120F3A71C004F7257 /* DetailViewController.swift in Sources */,
 				14B2649F20F3A71C004F7257 /* MasterViewController.swift in Sources */,
+				14B264B120F3AC88004F7257 /* City.swift in Sources */,
 				14B2649D20F3A71C004F7257 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
