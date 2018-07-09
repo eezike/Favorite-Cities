@@ -9,38 +9,47 @@
 import UIKit
 
 class MasterViewController: UITableViewController {
-
+    
     var detailViewController: DetailViewController? = nil
     var cities = [City]()
-
-
+    let defaults = UserDefaults.standard
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         navigationItem.leftBarButtonItem = editButtonItem
-
+        
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
         navigationItem.rightBarButtonItem = addButton
         if let split = splitViewController {
             let controllers = split.viewControllers
             detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
+        if let savedData = defaults.object(forKey: "data") as? Data
+        {
+            if let decoded = try? JSONDecoder().decode([City].self, from: savedData)
+            {
+                cities = decoded
+            }
+        }
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         super.viewWillAppear(animated)
         tableView.reloadData()
+        saveData()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     @objc
     func insertNewObject(_ sender: Any) {
-       let alert = UIAlertController(title: "Add City", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add City", message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             textField.placeholder = "City"
         }
@@ -54,27 +63,28 @@ class MasterViewController: UITableViewController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
         let insertAction = UIAlertAction(title: "Add", style: .default) { (action) in
-          let cityTextField = alert.textFields![0] as UITextField
-          let stateTextField = alert.textFields![1] as UITextField
-          let populationTextField = alert.textFields![2] as UITextField
-          guard let image = UIImage(named: cityTextField.text!) else
-          {
+            let cityTextField = alert.textFields![0] as UITextField
+            let stateTextField = alert.textFields![1] as UITextField
+            let populationTextField = alert.textFields![2] as UITextField
+            guard let image = UIImage(named: cityTextField.text!) else
+            {
                 print("missing \(cityTextField.text!) image")
                 return
-          }
-          if let population = Int(populationTextField.text!)
-          {
+            }
+            if let population = Int(populationTextField.text!)
+            {
                 let city = City(name: cityTextField.text!, state: stateTextField.text!, population: population, image: UIImagePNGRepresentation(image)!)
                 self.cities.append(city)
                 self.tableView.reloadData()
-          }
+                self.saveData()
+            }
         }
         alert.addAction(insertAction)
         present(alert, animated: true, completion: nil)
     }
-
+    
     // MARK: - Segues
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
@@ -86,34 +96,35 @@ class MasterViewController: UITableViewController {
             }
         }
     }
-
+    
     // MARK: - Table View
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cities.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
+        
         let object = cities[indexPath.row]
         cell.textLabel!.text = object.name
         return cell
     }
-
+    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             cities.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            saveData()
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
@@ -122,8 +133,17 @@ class MasterViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let objectToMove = cities.remove(at: sourceIndexPath.row)
         cities.insert(objectToMove, at: destinationIndexPath.row)
+        saveData()
     }
-
-
+    
+    func saveData()
+    {
+        if let encoded = try? JSONEncoder().encode(cities)
+        {
+            defaults.set(encoded, forKey: "data")
+        }
+    }
+    
+    
 }
 
